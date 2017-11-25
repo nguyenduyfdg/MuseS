@@ -1,0 +1,141 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.example.dell.museumguide.SettingsActivity"
+    android:id="@+id/activity_settings">
+
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:scaleType="centerCrop"
+        android:adjustViewBounds="true"
+        android:id="@+id/background_settings"
+        android:alpha="@dimen/background_alpha"/>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:layout_margin="@dimen/activity_margin">
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerHorizontal="true"
+                android:textSize="@dimen/text_title"
+                android:id="@+id/txtSettings" />
+
+        </RelativeLayout>
+
+        <ScrollView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+                <Switch
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/swAuto"
+                    android:onClick="swAuto_click"
+                    android:textSize="@dimen/text_header"
+                    android:layout_marginBottom="@dimen/activity_vertical_margin"
+                    android:layout_marginTop="@dimen/activity_vertical_margin"/>
+
+                <Switch
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/swDark"
+                    android:onClick="swDark_click"
+                    android:textSize="@dimen/text_header"
+                    android:layout_marginBottom="@dimen/activity_vertical_margin" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/txtBackground"
+                    android:textSize="@dimen/text_header"
+                    android:layout_marginBottom="@dimen/activity_vertical_margin"/>
+
+                <RadioGroup
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/btnBackground"
+                    android:orientation="horizontal"
+                    android:layout_marginStart="@dimen/activity_horizontal_margin"
+                    android:layout_marginLeft="@dimen/activity_horizontal_margin">
+
+                    <RadioButton
+                        android:layout_width="60dp"
+                        android:layout_height="60dp"
+                        android:id="@+id/btnBackground_1"
+                        android:onClick="btnBackground_click"
+                        android:button="@drawable/radio_background_button"/>
+
+                    <RadioButton
+                        android:layout_width="60dp"
+                        android:layout_height="60dp"
+                        android:id="@+id/btnBackground_2"
+                        android:onClick="btnBackground_click"
+                        android:button="@drawable/radio_background_button"/>
+
+                    <RadioButton
+                        android:layout_width="60dp"
+                        android:layout_height="60dp"
+                        android:id="@+id/btnBackground_3"
+                        android:onClick="btnBackground_click"
+                        android:button="@drawable/radio_background_button"/>
+
+                    <RadioButton
+                        android:layout_width="60dp"
+                        android:layout_height="60dp"
+                        android:id="@+id/btnBackground_4"
+                        android:onClick="btnBackground_click"
+                        android:button="@drawable/radio_background_button"/>
+                </RadioGroup>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/txtLanguage"
+                    android:textSize="@dimen/text_header"
+                    android:layout_marginBottom="@dimen/activity_vertical_margin"/>
+
+                <RadioGroup
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/btnLanguage"
+                    android:orientation="horizontal"
+                    android:layout_marginLeft="@dimen/activity_horizontal_margin"
+                    android:layout_marginStart="@dimen/activity_horizontal_margin">
+
+                    <RadioButton
+                        android:layout_width="80dp"
+                        android:layout_height="50dp"
+                        android:id="@+id/btnEnglish"
+                        android:onClick="btnLanguage_click"
+                        android:button="@drawable/radio_language_button"
+                        android:background="@drawable/language_english"/>
+
+                    <RadioButton
+                        android:layout_width="80dp"
+                        android:layout_height="50dp"
+                        android:id="@+id/btnVietnamese"
+                        android:onClick="btnLanguage_click"
+                        android:button="@drawable/radio_language_button"
+                        android:background="@drawable/language_vietnamese"/>
+                </RadioGroup>
+            </LinearLayout>
+        </ScrollView>
+    </LinearLayout>
+
+
+
+</RelativeLayout>

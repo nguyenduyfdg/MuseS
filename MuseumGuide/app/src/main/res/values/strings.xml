@@ -1,0 +1,41 @@
+<resources>
+    <string name="app_name">Museum Guide</string>
+    <string name="title_activity_main2">Main2Activity</string>
+    <string name="title_activity_maps">Map</string>
+
+    <string name="text_museum_en">Museums</string>
+    <string name="text_map_en">Map</string>
+    <string name="text_favorite_en">Favorites</string>
+    <string name="text_settings_en">Settings</string>
+    <string name="text_close_en">Close</string>
+    <string name="text_museum_list_en">Museums List</string>
+    <string name="text_artifact_list_en">Artifacts List</string>
+    <string name="text_overview_en">Overview</string>
+    <string name="text_address_en">Address</string>
+    <string name="text_contract_en">Contract</string>
+    <string name="text_time_en">Time</string>
+    <string name="text_ticket_en">Ticket</string>
+    <string name="text_background_en">Background</string>
+    <string name="text_language_en">Language</string>
+    <string name="text_auto_en">Auto mode</string>
+    <string name="text_dark_en">Dark mode</string>
+    <string name="text_favorites_list_en">Favorites</string>
+
+    <string name="text_museum_vi">Viện bảo tàng</string>
+    <string name="text_map_vi">Bản đồ</string>
+    <string name="text_favorite_vi">Yêu thích</string>
+    <string name="text_settings_vi">Cài đặt</string>
+    <string name="text_close_vi">Đóng</string>
+    <string name="text_museum_list_vi">Danh sách Viện bảo tàng</string>
+    <string name="text_artifact_list_vi">Danh sách Hiện vật</string>
+    <string name="text_overview_vi">Tổng quan</string>
+    <string name="text_address_vi">Địa chỉ</string>
+    <string name="text_contract_vi">Liên hệ</string>
+    <string name="text_time_vi">Thời gian</string>
+    <string name="text_ticket_vi">Giá vé</string>
+    <string name="text_background_vi">Hình nền</string>
+    <string name="text_language_vi">Ngôn ngữ</string>
+    <string name="text_auto_vi">Chế độ tự động</string>
+    <string name="text_dark_vi">Chế độ ban đêm</string>
+    <string name="text_favorites_list_vi">Danh sách Yêu thích</string>
+</resources>

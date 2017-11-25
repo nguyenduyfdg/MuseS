@@ -1,0 +1,5 @@
+﻿Robot của Leonardo (hoặc cơ khí của Leonardo) là một máy tự động hình người được thiết kế và có thể được xây dựng bởi Leonardo da Vinci khoảng năm 1495.
+
+Các thiết kế ghi chú cho robot xuất hiện trong các cuốn sách phác thảo được tái khám phá vào những năm 1950. Leonardo được cho là đã trưng bày chiếc máy này tại một buổi lễ do Ludovico Sforza tổ chức tại tòa án Milan vào năm 1495. Robot hiệp sĩ có thể đứng, ngồi, nâng khẩu trang và tự điều khiển cánh tay của mình, và có một hàm mặt giải phẫu hợp lý. Toàn bộ hệ thống robot được vận hành bởi một loạt các bánh và cáp. Kể từ khi phát hiện ra cuốn phác thảo, robot đã được xây dựng dựa trên thiết kế của Leonardo, và được phát hiện là có đầy đủ chức năng.
+
+Robot được miêu tả như là áo giáp thời Trung Cổ Đức-Ý, và có thể thực hiện một số chuyển động của con người. Đó là một phần là kết quả của nghiên cứu giải phẫu học của Leonardo trong cuốn Canon of Proportions như được mô tả trong Man Vitruvian.

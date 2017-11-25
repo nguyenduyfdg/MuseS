@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<projectDescription>
+	<name>MuseS_Project_v1.0</name>
+	<comment></comment>
+	<projects>
+		<project>lpmsp430f5529_25_core</project>
+	</projects>
+	<buildSpec>
+		<buildCommand>
+			<name>org.eclipse.cdt.managedbuilder.core.genmakebuilder</name>
+			<arguments>
+			</arguments>
+		</buildCommand>
+		<buildCommand>
+			<name>org.eclipse.cdt.managedbuilder.core.ScannerConfigBuilder</name>
+			<triggers>full,incremental,</triggers>
+			<arguments>
+			</arguments>
+		</buildCommand>
+	</buildSpec>
+	<natures>
+		<nature>com.ti.ccstudio.energia.sketchNature</nature>
+		<nature>com.ti.ccstudio.core.ccsNature</nature>
+		<nature>org.eclipse.cdt.core.cnature</nature>
+		<nature>org.eclipse.cdt.managedbuilder.core.managedBuildNature</nature>
+		<nature>org.eclipse.cdt.core.ccnature</nature>
+		<nature>org.eclipse.cdt.managedbuilder.core.ScannerConfigNature</nature>
+	</natures>
+	<variableList>
+		<variable>
+			<name>BEACON_CPP</name>
+			<value>file:/D:/Project/TI%20Contest/Workspace_new/MuseS_Project_v1.0/Beacon.cpp</value>
+		</variable>
+		<variable>
+			<name>BEACON_PATH</name>
+			<value>file:/D:/Project/TI%20Contest/Workspace_new/MuseS_Project_v1.0/Beacon.h</value>
+		</variable>
+	</variableList>
+</projectDescription>

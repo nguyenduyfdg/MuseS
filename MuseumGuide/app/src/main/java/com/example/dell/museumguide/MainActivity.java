@@ -1,12 +1,16 @@
 package com.example.dell.museumguide;
 
+import android.Manifest;
 import android.bluetooth.BluetoothAdapter;
+import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Color;
 import android.graphics.drawable.Drawable;
+import android.os.Build;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.ImageView;
@@ -21,6 +25,10 @@ import java.io.InputStream;
 import java.io.OutputStream;
 
 public class MainActivity extends AppCompatActivity {
+
+    private static final int REQUEST_PERMISSIONS = 1;
+    private static final int REQUEST_ENABLE_BLUETOOTH = 1;
+    Context context = this;
 
     String DATABASE_NAME="dbMuseums.sqlite";
     private static final String DB_PATH_SUFFIX = "/databases/";
@@ -54,16 +62,32 @@ public class MainActivity extends AppCompatActivity {
 
         processCopy();
         getSettingsFromDatabase();
+        checkPermissions();
+        checkEnableBluetooth();
+    }
 
+    private void checkEnableBluetooth() {
         if (auto){
             BluetoothAdapter bluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
             if (!bluetoothAdapter.isEnabled()){
-                Intent intent = new Intent(MainActivity.this,BluetoothCheckerActivity.class);
-                startActivity(intent);
+                Intent enableBtIntent = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
+                startActivityIfNeeded(enableBtIntent, REQUEST_ENABLE_BLUETOOTH);
             }
+        }
+    }
 
-            /*Intent intent = new Intent(MainActivity.this,BluetoothCheckerActivity.class);
-            startActivity(intent);*/
+    private void checkPermissions() {
+        String[] permissions = {
+                Manifest.permission.ACCESS_FINE_LOCATION,
+                Manifest.permission.ACCESS_COARSE_LOCATION,
+                Manifest.permission.BLUETOOTH,
+                Manifest.permission.BLUETOOTH_ADMIN,
+                Manifest.permission.MODIFY_AUDIO_SETTINGS,
+                Manifest.permission.MEDIA_CONTENT_CONTROL
+        };
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            requestPermissions(permissions, REQUEST_PERMISSIONS);
         }
     }
 
@@ -183,6 +207,31 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+    public static void deleteCache(Context context) {
+        try {
+            File dir = context.getCacheDir();
+            if (dir != null && dir.isDirectory()) {
+                deleteDir(dir);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    public static boolean deleteDir(File dir) {
+        if (dir != null && dir.isDirectory()) {
+            String[] children = dir.list();
+            for (String aChildren : children) {
+                boolean success = deleteDir(new File(dir, aChildren));
+                if (!success) {
+                    return false;
+                }
+            }
+        }
+        assert dir != null;
+        return dir.delete();
+    }
+
     private void getSettingsFromDatabase() {
         database = openOrCreateDatabase(DATABASE_NAME,MODE_PRIVATE,null);
         Cursor cursor = database.rawQuery("SELECT * FROM Settings", null);
@@ -204,6 +253,7 @@ public class MainActivity extends AppCompatActivity {
                 CopyDataBaseFromAsset();
             }
             catch (Exception e){
+                e.printStackTrace();
             }
         }
     }
@@ -242,7 +292,15 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+    @NonNull
     private String getDatabasePath(){
         return getApplicationInfo().dataDir + DB_PATH_SUFFIX+ DATABASE_NAME;
+    }
+
+    @Override
+    public void onBackPressed() {
+        deleteCache(context);
+
+        super.onBackPressed();
     }
 }

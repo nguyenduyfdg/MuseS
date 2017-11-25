@@ -3,10 +3,15 @@ package com.example.dell.museumguide;
 import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
+import android.os.RemoteException;
+import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ImageView;
@@ -18,12 +23,22 @@ import android.widget.TextView;
 import com.example.dell.adapter.DarkArtifactAdapter;
 import com.example.dell.adapter.LightArtifactAdapter;
 import com.example.dell.model.ArtifactView;
+import com.example.dell.model.BeaconView;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
+
+import org.altbeacon.beacon.Beacon;
+import org.altbeacon.beacon.BeaconConsumer;
+import org.altbeacon.beacon.BeaconManager;
+import org.altbeacon.beacon.BeaconParser;
+import org.altbeacon.beacon.MonitorNotifier;
+import org.altbeacon.beacon.RangeNotifier;
+import org.altbeacon.beacon.Region;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -31,12 +46,16 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.ArrayList;
+import java.util.Collection;
 
-public class DetailActivity extends AppCompatActivity implements OnMapReadyCallback {
+public class DetailActivity extends AppCompatActivity implements OnMapReadyCallback, BeaconConsumer {
 
     String DATABASE_NAME="dbMuseums.sqlite";
     private static final String DB_PATH_SUFFIX = "/databases/";
     SQLiteDatabase database=null;
+
+    public static final String TAG = "BeaconsEverywhere";
+    private BeaconManager beaconManager = null;
 
     RelativeLayout activity_detail;
     ImageView background_detail;
@@ -70,18 +89,23 @@ public class DetailActivity extends AppCompatActivity implements OnMapReadyCallb
 
     boolean auto;
     boolean dark;
-    String language;
+    String language = "";
 
     int id;
-    String title;
-    String image;
-    String address;
+    String title = "";
+    String image = "";
+    String address = "";
 
-    String path;
-    String background;
-    String place;
-    String name;
-    String overview;
+    ArrayList<String> addressList = new ArrayList<>();
+    String beacon = "";
+    int maxRSSI;
+    ArrayList<BeaconView> beaconList = new ArrayList<>();
+
+    String path = "";
+    String background = "";
+    String place = "";
+    String name = "";
+    String overview = "";
     double latitude;
     double longitude;
 
@@ -109,6 +133,29 @@ public class DetailActivity extends AppCompatActivity implements OnMapReadyCallb
         getContractFromDatabase();
         getTimeFromDatabase();
         getTicketFromDatabase();
+
+
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+
+        if (auto){
+            beaconConfigure();
+
+            if (!beaconManager.isBound(this)){
+                beaconManager.bind(this);
+            }
+        }
+    }
+
+    private void beaconConfigure() {
+        beaconManager = BeaconManager.getInstanceForApplication(this.getApplicationContext());
+
+        // Detect the iBeacons:
+        beaconManager.getBeaconParsers().add(new BeaconParser()
+                .setBeaconLayout("m:2-3=0215,i:4-19,i:20-21,i:22-23,p:24-24"));
     }
 
     private void addEvents() {
@@ -118,7 +165,7 @@ public class DetailActivity extends AppCompatActivity implements OnMapReadyCallb
                 ArtifactView item = (ArtifactView) parent.getItemAtPosition(position);
                 int x = item.getId();
 
-                Intent intent = new Intent(DetailActivity.this,MediaActivity.class);
+                Intent intent = new Intent(DetailActivity.this, MediaActivity.class);
 
                 intent.putExtra("path",path);
                 intent.putExtra("id",x);
@@ -140,10 +187,6 @@ public class DetailActivity extends AppCompatActivity implements OnMapReadyCallb
 
         TabHost.TabSpec tabArtifacts = tabHost.newTabSpec("tabArtifacts");
         tabArtifacts.setContent(R.id.tabArtifacts);
-
-        SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
-                .findFragmentById(R.id.mapMuseum);
-        mapFragment.getMapAsync(this);
 
         Drawable drawable = null;
         try {
@@ -285,6 +328,10 @@ public class DetailActivity extends AppCompatActivity implements OnMapReadyCallb
                 break;
         }
 
+        SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
+                .findFragmentById(R.id.mapMuseum);
+        mapFragment.getMapAsync(this);
+
         tabHost.addTab(tabOverview);
         tabHost.addTab(tabMap);
         tabHost.addTab(tabArtifacts);
@@ -315,6 +362,8 @@ public class DetailActivity extends AppCompatActivity implements OnMapReadyCallb
             image = cursor.getString(3);
             address = cursor.getString(6);
 
+            addressList.add(address);
+
             arrArtifact.add(new ArtifactView(id,title,image,address));
         }
         while (cursor.moveToNext());
@@ -331,16 +380,17 @@ public class DetailActivity extends AppCompatActivity implements OnMapReadyCallb
         do {
             switch (language){
                 case "english":
-                    contractContent = contractContent + cursor.getString(1) + "\n";
+                    contractContent += cursor.getString(1) + "\n";
                     break;
                 case "vietnamese":
-                    contractContent = contractContent + cursor.getString(2) + "\n";
+                    contractContent += cursor.getString(2) + "\n";
             }
-            contractValue = contractValue + cursor.getString(0) + "\n";
+            contractValue += cursor.getString(0) + "\n";
         }
         while (cursor.moveToNext());
         cursor.close();
 
+        assert contractContent != null;
         contractContent = contractContent.substring(4,contractContent.length()-1);
         contractValue = contractValue.substring(4,contractValue.length()-1);
 
@@ -358,16 +408,17 @@ public class DetailActivity extends AppCompatActivity implements OnMapReadyCallb
         do {
             switch (language){
                 case "english":
-                    ticketContent = ticketContent + cursor.getString(1) + "\n";
+                    ticketContent += cursor.getString(1) + "\n";
                     break;
                 case "vietnamese":
-                    ticketContent = ticketContent + cursor.getString(2) + "\n";
+                    ticketContent += cursor.getString(2) + "\n";
             }
-            ticketValue = ticketValue + cursor.getString(0) + "\n";
+            ticketValue += cursor.getString(0) + "\n";
         }
         while (cursor.moveToNext());
         cursor.close();
 
+        assert ticketContent != null;
         ticketContent = ticketContent.substring(4,ticketContent.length()-1);
         ticketValue = ticketValue.substring(4,ticketValue.length()-1);
 
@@ -385,16 +436,17 @@ public class DetailActivity extends AppCompatActivity implements OnMapReadyCallb
         do {
             switch (language){
                 case "english":
-                    timeContent = timeContent + cursor.getString(1) + "\n";
+                    timeContent += cursor.getString(1) + "\n";
                     break;
                 case "vietnamese":
-                    timeContent = timeContent + cursor.getString(2) + "\n";
+                    timeContent += cursor.getString(2) + "\n";
             }
-            timeValue = timeValue + cursor.getString(0) + "\n";
+            timeValue += cursor.getString(0) + "\n";
         }
         while (cursor.moveToNext());
         cursor.close();
 
+        assert timeContent != null;
         timeContent = timeContent.substring(4,timeContent.length()-1);
         timeValue = timeValue.substring(4,timeValue.length()-1);
 
@@ -409,6 +461,7 @@ public class DetailActivity extends AppCompatActivity implements OnMapReadyCallb
                 CopyDataBaseFromAsset();
             }
             catch (Exception e){
+                e.printStackTrace();
             }
         }
     }
@@ -447,16 +500,166 @@ public class DetailActivity extends AppCompatActivity implements OnMapReadyCallb
         }
     }
 
+    @NonNull
     private String getDatabasePath(){
         return getApplicationInfo().dataDir + DB_PATH_SUFFIX+ DATABASE_NAME;
     }
 
+    public Bitmap resizeMapIcons() {
+        Bitmap imageBitmap = BitmapFactory.decodeResource(getResources(), getResources().getIdentifier("museum_red", "drawable", getPackageName()));
+        return Bitmap.createScaledBitmap(imageBitmap, 80, 80, false);
+    }
+
     @Override
     public void onMapReady(GoogleMap googleMap) {
-        // Add a marker at that Museum and move the camera
-        LatLng latLng = new LatLng(latitude, longitude);
-        googleMap.addMarker(new MarkerOptions().position(latLng).title(name).snippet(place));
-        googleMap.moveCamera(CameraUpdateFactory.newLatLng(latLng));
-        googleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng, (float) 16));
+        LatLng museum = new LatLng(latitude, longitude);
+
+        googleMap.addMarker(new MarkerOptions()
+                .position(museum)
+                .title(name)
+                .snippet(place)
+                .icon(BitmapDescriptorFactory.fromBitmap(resizeMapIcons()))
+        );
+
+        googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(museum, (float) 17));
+    }
+
+    @Override
+    public void onBeaconServiceConnect() {
+        Region region = new Region("myBeacons", null, null, null);
+        Log.i(TAG,"onBeaconServiceConnect");
+
+        beaconManager.addMonitorNotifier(new MonitorNotifier() {
+            @Override
+            public void didEnterRegion(Region region) {
+                try {
+                    Log.i(TAG, "didEnterRegion");
+                    beaconManager.startRangingBeaconsInRegion(region);
+                } catch (RemoteException e) {
+                    e.printStackTrace();
+                    Log.i(TAG,"notEnterRegion");
+                }
+            }
+
+            @Override
+            public void didExitRegion(Region region) {
+                try {
+                    Log.i(TAG, "didExitRegion");
+                    beaconManager.stopRangingBeaconsInRegion(region);
+                } catch (RemoteException e) {
+                    e.printStackTrace();
+                    Log.i(TAG,"notExitRegion");
+                }
+            }
+
+            @Override
+            public void didDetermineStateForRegion(int i, Region region) {
+                Log.i(TAG,"didDetermineStateForRegion");
+                try {
+                    beaconManager.startRangingBeaconsInRegion(region);
+                    Log.i(TAG,"startRangingBeaconsInRegion");
+                } catch (RemoteException e) {
+                    e.printStackTrace();
+                }
+            }
+        });
+
+        beaconManager.addRangeNotifier(new RangeNotifier() {
+            @Override
+            public void didRangeBeaconsInRegion(Collection<Beacon> beacons, Region region) {
+                int x = -1;
+                Log.i(TAG,"didRangeBeaconsInRegion " + beacons.size());
+                if (beacons.size() > 0){
+                    for (Beacon oneBeacon : beacons) {
+                        beaconList.add(new BeaconView(
+                                oneBeacon.getId1() + "/" + oneBeacon.getId2() + "/" + oneBeacon.getId3(),
+                                oneBeacon.getRssi()
+                                )
+                        );
+                        Log.i(
+                                TAG,
+                                " RSSI: " +
+                                        oneBeacon.getRssi() +
+                                        " ID: " +
+                                        oneBeacon.getId1() +
+                                        "/" +
+                                        oneBeacon.getId2() +
+                                        "/" +
+                                        oneBeacon.getId3()
+                        );
+                    }
+
+                    if (beaconList.size() >= 6) {
+                        maxRSSI = beaconList.get(0).getRssi();
+                        beacon = beaconList.get(0).getAddress();
+                        for (BeaconView beaconView : beaconList) {
+                            if (beaconView.getRssi() > maxRSSI) {
+                                beacon = beaconView.getAddress();
+                                maxRSSI = beaconView.getRssi();
+                            }
+                        }
+                        Log.i(TAG, "Max RSSI: " + maxRSSI + " ID: " + beacon);
+
+                        for (int i = 0; i < addressList.size(); i++){
+                            Log.i(TAG,addressList.get(i));
+                            if (beacon.equals(addressList.get(i))){
+                                x = arrArtifact.get(i).getId();
+                            }
+                        }
+
+                        if (x > -1){
+                            beaconList.clear();
+
+                            beaconManager.unbind(DetailActivity.this);
+                            beaconManager.removeAllMonitorNotifiers();
+                            beaconManager.removeAllRangeNotifiers();
+
+                            Intent intent = new Intent(DetailActivity.this,MediaActivity.class);
+
+                            intent.putExtra("path", path);
+                            intent.putExtra("id", x);
+
+                            startActivity(intent);
+                        }
+
+                        beaconList.clear();
+                    }
+                }
+            }
+        });
+
+        try {
+            beaconManager.startMonitoringBeaconsInRegion(region);
+            Log.i(TAG,"startMonitoringBeaconsInRegion");
+        } catch (RemoteException e) {
+            Log.i(TAG,"stopMonitoringBeaconsInRegion");
+            e.printStackTrace();
+        }
+    }
+
+    @Override
+    public void onBackPressed() {
+        if (auto){
+            if (beaconManager.isBound(this)){
+                beaconManager.unbind(this);
+                beaconManager.removeAllMonitorNotifiers();
+                beaconManager.removeAllRangeNotifiers();
+            }
+        }
+
+        super.onBackPressed();
+    }
+
+    @Override
+    protected void onDestroy() {
+        if (auto){
+            if (beaconManager.isBound(this)){
+                beaconManager.unbind(this);
+                beaconManager.removeAllMonitorNotifiers();
+                beaconManager.removeAllRangeNotifiers();
+            }
+        }
+
+        super.onDestroy();
     }
 }

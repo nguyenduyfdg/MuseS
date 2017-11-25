@@ -16,4 +16,6 @@
     <dimen name="text_media">13sp</dimen>
 
     <item name="background_alpha" format="float" type="dimen">0.6</item>
+    <dimen name="app_bar_height">180dp</dimen>
+    <dimen name="text_margin">16dp</dimen>
 </resources>

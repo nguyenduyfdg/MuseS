@@ -2,10 +2,10 @@ apply plugin: 'com.android.application'
 
 android {
     compileSdkVersion 25
-    buildToolsVersion "25.0.2"
+    buildToolsVersion '26.0.2'
     defaultConfig {
         applicationId "com.example.dell.museumguide"
-        minSdkVersion 16
+        minSdkVersion 19
         targetSdkVersion 25
         versionCode 1
         versionName "1.0"
@@ -31,4 +31,5 @@ dependencies {
     compile 'com.android.support:design:25.3.0'
     compile 'com.google.android.gms:play-services-maps:10.2.1'
     testCompile 'junit:junit:4.12'
+    compile project(':android-beacon-library-2.11')
 }

@@ -1,0 +1,1 @@
+"./Beacon.o" "./DFPlayer_Mini_Mp3.o" "./MuseS_Project_v1.1.o" -Wl,--start-group -llpmsp430f5529_25_core -Wl,--end-group 

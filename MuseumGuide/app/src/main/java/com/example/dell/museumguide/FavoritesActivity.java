@@ -7,6 +7,7 @@ import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.ExpandableListView;
@@ -103,7 +104,7 @@ public class FavoritesActivity extends AppCompatActivity {
                 String path = item.getPath();
                 int idArtifact = item.getArtifactViews().get(childPosition).getId();
 
-                Intent intent = new Intent(FavoritesActivity.this,MediaActivity.class);
+                Intent intent = new Intent(FavoritesActivity.this, MediaActivity.class);
 
                 intent.putExtra("path",path);
                 intent.putExtra("id",idArtifact);
@@ -238,6 +239,7 @@ public class FavoritesActivity extends AppCompatActivity {
                 CopyDataBaseFromAsset();
             }
             catch (Exception e){
+                e.printStackTrace();
             }
         }
     }
@@ -276,6 +278,7 @@ public class FavoritesActivity extends AppCompatActivity {
         }
     }
 
+    @NonNull
     private String getDatabasePath(){
         return getApplicationInfo().dataDir + DB_PATH_SUFFIX+ DATABASE_NAME;
     }

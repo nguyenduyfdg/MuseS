@@ -6,6 +6,7 @@ import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.AdapterView;
@@ -223,6 +224,7 @@ public class MuseumsActivity extends AppCompatActivity {
                 CopyDataBaseFromAsset();
             }
             catch (Exception e){
+                e.printStackTrace();
             }
         }
     }
@@ -261,6 +263,7 @@ public class MuseumsActivity extends AppCompatActivity {
         }
     }
 
+    @NonNull
     private String getDatabasePath(){
         return getApplicationInfo().dataDir + DB_PATH_SUFFIX+ DATABASE_NAME;
     }

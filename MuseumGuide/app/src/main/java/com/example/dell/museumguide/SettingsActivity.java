@@ -6,6 +6,7 @@ import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.ImageView;
@@ -20,9 +21,6 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
-
-import static com.example.dell.museumguide.R.id.btnBackground_3;
-import static com.example.dell.museumguide.R.id.btnBackground_4;
 
 public class SettingsActivity extends AppCompatActivity {
 
@@ -208,6 +206,7 @@ public class SettingsActivity extends AppCompatActivity {
                 CopyDataBaseFromAsset();
             }
             catch (Exception e){
+                e.printStackTrace();
             }
         }
     }
@@ -246,6 +245,7 @@ public class SettingsActivity extends AppCompatActivity {
         }
     }
 
+    @NonNull
     private String getDatabasePath(){
         return getApplicationInfo().dataDir + DB_PATH_SUFFIX+ DATABASE_NAME;
     }

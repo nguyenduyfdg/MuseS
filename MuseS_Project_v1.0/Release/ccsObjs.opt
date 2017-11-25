@@ -1,1 +1,0 @@
-"./Beacon.o" "./MuseS_Project_v1.0.o" -Wl,--start-group -llpmsp430f5529_25_core -lm -Wl,--end-group 

@@ -23,7 +23,7 @@ import java.io.InputStream;
 import java.io.OutputStream;
 
 public class SettingsActivity extends AppCompatActivity {
-    String DATABASE_NAME="dbMuseums.sqlite";
+    String DATABASE_NAME="dbMuseums_1.sqlite";
     private static final String DB_PATH_SUFFIX = "/databases/";
     SQLiteDatabase database=null;
 

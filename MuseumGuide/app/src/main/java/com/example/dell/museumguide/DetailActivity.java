@@ -52,7 +52,7 @@ import java.util.Collection;
 public class DetailActivity extends AppCompatActivity implements OnMapReadyCallback, BeaconConsumer {
     private static final int REQUEST_ENABLE_BLUETOOTH = 1;
 
-    String DATABASE_NAME="dbMuseums.sqlite";
+    String DATABASE_NAME="dbMuseums_1.sqlite";
     private static final String DB_PATH_SUFFIX = "/databases/";
     SQLiteDatabase database = null;
 
@@ -97,6 +97,7 @@ public class DetailActivity extends AppCompatActivity implements OnMapReadyCallb
     String title = "";
     String image = "";
     String address = "";
+    String base;
 
     ArrayList<String> addressList = new ArrayList<>();
     String beacon = "";
@@ -214,7 +215,8 @@ public class DetailActivity extends AppCompatActivity implements OnMapReadyCallb
         try {
             InputStream inputStream = getAssets().open(background);
             drawable = Drawable.createFromStream(inputStream, null);
-        } catch (IOException e) {
+        }
+        catch (IOException e) {
             e.printStackTrace();
         }
 
@@ -376,17 +378,25 @@ public class DetailActivity extends AppCompatActivity implements OnMapReadyCallb
         arrArtifact.clear();
 
         database = openOrCreateDatabase(DATABASE_NAME,MODE_PRIVATE,null);
-        Cursor cursor = database.rawQuery("SELECT * FROM " +path+ " order by title", null);
+        Cursor cursor = database.rawQuery("SELECT * FROM " + path + " order by title", null);
         cursor.moveToFirst();
         do {
             id = cursor.getInt(0);
             title = cursor.getString(1);
             image = cursor.getString(3);
             address = cursor.getString(6);
+            base = cursor.getString(8);
 
             addressList.add(address);
 
-            arrArtifact.add(new ArtifactView(id,title,image,address));
+            arrArtifact.add(
+                    new ArtifactView(
+                            id,
+                            title,
+                            path + "/" + base + "/" + image,
+                            address
+                    )
+            );
         }
         while (cursor.moveToNext());
         cursor.close();
@@ -655,7 +665,8 @@ public class DetailActivity extends AppCompatActivity implements OnMapReadyCallb
         try {
             beaconManager.startMonitoringBeaconsInRegion(region);
             Log.i(TAG,"startMonitoringBeaconsInRegion");
-        } catch (RemoteException e) {
+        }
+        catch (RemoteException e) {
             Log.i(TAG,"stopMonitoringBeaconsInRegion");
             e.printStackTrace();
         }

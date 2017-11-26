@@ -1,7 +1,5 @@
 package com.example.dell.museumguide;
 
-import android.Manifest;
-import android.bluetooth.BluetoothAdapter;
 import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
@@ -27,10 +25,9 @@ import java.io.OutputStream;
 public class MainActivity extends AppCompatActivity {
 
     private static final int REQUEST_PERMISSIONS = 1;
-    private static final int REQUEST_ENABLE_BLUETOOTH = 1;
     Context context = this;
 
-    String DATABASE_NAME="dbMuseums.sqlite";
+    String DATABASE_NAME="dbMuseums_1.sqlite";
     private static final String DB_PATH_SUFFIX = "/databases/";
     SQLiteDatabase database=null;
 
@@ -67,15 +64,15 @@ public class MainActivity extends AppCompatActivity {
 
     private void checkPermissions() {
         String[] permissions = {
-                Manifest.permission.ACCESS_FINE_LOCATION,
-                Manifest.permission.ACCESS_COARSE_LOCATION,
-                Manifest.permission.BLUETOOTH,
-                Manifest.permission.BLUETOOTH_ADMIN,
-                Manifest.permission.MODIFY_AUDIO_SETTINGS,
-                Manifest.permission.MEDIA_CONTENT_CONTROL,
-                Manifest.permission.INTERNET,
-                Manifest.permission.ACCESS_NETWORK_STATE,
-                Manifest.permission.ACCESS_WIFI_STATE
+                android.Manifest.permission.ACCESS_FINE_LOCATION,
+                android.Manifest.permission.ACCESS_COARSE_LOCATION,
+                android.Manifest.permission.BLUETOOTH,
+                android.Manifest.permission.BLUETOOTH_ADMIN,
+                android.Manifest.permission.MODIFY_AUDIO_SETTINGS,
+                android.Manifest.permission.MEDIA_CONTENT_CONTROL,
+                android.Manifest.permission.INTERNET,
+                android.Manifest.permission.ACCESS_NETWORK_STATE,
+                android.Manifest.permission.ACCESS_WIFI_STATE
         };
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {

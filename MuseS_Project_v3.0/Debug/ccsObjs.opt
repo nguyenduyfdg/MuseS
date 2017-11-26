@@ -1,1 +1,0 @@
-"./jhas.o" "./test.o" "./TEST_ONLY.o" -Wl,--start-group -llpmsp430f5529_core -lm -Wl,--end-group 

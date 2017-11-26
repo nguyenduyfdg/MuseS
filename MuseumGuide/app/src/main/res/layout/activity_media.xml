@@ -38,7 +38,8 @@
             android:layout_marginEnd="@dimen/image_button_horizontal_margin"
             android:layout_marginRight="@dimen/image_button_horizontal_margin"
             android:background="@null"
-            android:id="@+id/btnPlay"/>
+            android:id="@+id/btnPlay"
+            android:alpha="0.5"/>
 
         <ImageButton
             android:layout_width="@dimen/image_button_size"
@@ -80,23 +81,62 @@
             android:layout_toRightOf="@id/txtCurrent"
             android:layout_toStartOf="@id/txtDuration"
             android:layout_toLeftOf="@id/txtDuration"
-            android:id="@+id/seekBar" />
+            android:id="@+id/seekBar"
+            android:clickable="false"/>
 
-        <ImageView
+        <!--<ImageView
             android:layout_width="@dimen/image_button_size"
             android:layout_height="@dimen/image_button_half_size"
             android:layout_centerHorizontal="true"
             android:layout_above="@id/btnPlay"
             android:adjustViewBounds="true"
             android:scaleType="fitCenter"
-            android:id="@+id/imgPageChange"/>
+            android:id="@+id/imgPageChange"/>-->
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:layout_above="@id/btnPlay"
+            android:gravity="center"
+            android:id="@+id/layoutPageChange">
+
+            <ImageView
+                android:layout_width="@dimen/image_button_half_size"
+                android:layout_height="@dimen/image_button_half_size"
+                android:layout_margin="2dp"
+                android:adjustViewBounds="true"
+                android:scaleType="centerInside"
+                android:id="@+id/imgPage1"/>
+
+            <ImageView
+                android:layout_width="@dimen/image_button_half_size"
+                android:layout_height="@dimen/image_button_half_size"
+                android:layout_margin="2dp"
+                android:adjustViewBounds="true"
+                android:scaleType="centerInside"
+                android:id="@+id/imgPage2"/>
+
+        </LinearLayout>
+
+        <!--<LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:layout_above="@id/btnPlay">
+
+            <ImageView
+                android:layout_width="@dimen/image_button_half_size"
+                android:layout_height="@dimen/image_button_half_size" />
+
+        </LinearLayout>-->
 
         <android.support.v4.view.ViewPager
             android:id="@+id/viewPager"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_below="@id/txtTitle"
-            android:layout_above="@id/imgPageChange"/>
+            android:layout_above="@id/layoutPageChange"/>
 
     </RelativeLayout>
 

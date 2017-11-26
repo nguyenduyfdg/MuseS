@@ -29,7 +29,7 @@ import java.util.ArrayList;
 
 public class FavoritesActivity extends AppCompatActivity {
 
-    String DATABASE_NAME="dbMuseums.sqlite";
+    String DATABASE_NAME="dbMuseums_1.sqlite";
     private static final String DB_PATH_SUFFIX = "/databases/";
     SQLiteDatabase database=null;
     SQLiteDatabase database1=null;
@@ -50,6 +50,7 @@ public class FavoritesActivity extends AppCompatActivity {
     String imageArtifact;
     String addressArtifact;
     boolean favorite;
+    String base;
 
     Context context = this;
 
@@ -169,10 +170,10 @@ public class FavoritesActivity extends AppCompatActivity {
             imageMuseum = cursor.getString(3);
             addressMuseum = cursor.getString(5);
 
-            String place;
+            String place = null;
             try {
                 // get input stream for text
-                InputStream is = getAssets().open(table+"/"+language+"/"+addressMuseum);
+                InputStream is = getAssets().open(table + "/overview/" + language + addressMuseum);
                 // check size
                 int size = is.available();
                 // create buffer for IO
@@ -185,7 +186,7 @@ public class FavoritesActivity extends AppCompatActivity {
                 place = new String(buf);
             }
             catch (IOException ex) {
-                return;
+                ex.printStackTrace();
             }
 
             arrArtifact = new ArrayList<>();
@@ -199,9 +200,17 @@ public class FavoritesActivity extends AppCompatActivity {
                 imageArtifact = cursor1.getString(3);
                 addressArtifact = cursor1.getString(6);
                 favorite = cursor1.getInt(7) > 0;
+                base = cursor1.getString(8);
 
                 if (favorite){
-                    arrArtifact.add(new ArtifactView(idArtifact,title,imageArtifact,addressArtifact));
+                    arrArtifact.add(
+                            new ArtifactView(
+                                    idArtifact,
+                                    title,
+                                    table + "/" + base + "/" + imageArtifact,
+                                    addressArtifact
+                            )
+                    );
                 }
             }
             while (cursor1.moveToNext());
@@ -209,7 +218,16 @@ public class FavoritesActivity extends AppCompatActivity {
             database1.close();
 
             if (arrArtifact.size() > 0){
-                arrFavorite.add(new FavoriteMuseumView(idMuseum,imageMuseum,name,place,table,arrArtifact));
+                arrFavorite.add(
+                        new FavoriteMuseumView(
+                                idMuseum,
+                                table + "/overview/" + imageMuseum,
+                                name,
+                                place,
+                                table,
+                                arrArtifact
+                        )
+                );
             }
         }
         while (cursor.moveToNext());

@@ -34,7 +34,7 @@ public class MuseumsActivity extends AppCompatActivity {
     LightMuseumAdapter lightMuseumAdapter;
 
 
-    String DATABASE_NAME="dbMuseums.sqlite";
+    String DATABASE_NAME="dbMuseums_1.sqlite";
     private static final String DB_PATH_SUFFIX = "/databases/";
     SQLiteDatabase database=null;
 
@@ -184,11 +184,11 @@ public class MuseumsActivity extends AppCompatActivity {
             latitude = cursor.getDouble(6);
             longitude = cursor.getDouble(7);
 
-            String place;
-            String overview;
+            String place = null;
+            String overview = null;
             try {
                 // get input stream for text
-                InputStream is = getAssets().open(table+"/"+language+"/"+address);
+                InputStream is = getAssets().open(table + "/overview/" + language + address);
                 // check size
                 int size = is.available();
                 // create buffer for IO
@@ -200,7 +200,7 @@ public class MuseumsActivity extends AppCompatActivity {
                 // set result to TextView
                 place = new String(buf);
 
-                InputStream inputStream = getAssets().open(table+"/"+language+"/"+content);
+                InputStream inputStream = getAssets().open(table + "/overview/" + language + content);
                 int size1 = inputStream.available();
                 byte[] buf1 = new byte[size1];
                 inputStream.read(buf1);
@@ -208,10 +208,19 @@ public class MuseumsActivity extends AppCompatActivity {
                 overview = new String(buf1);
             }
             catch (IOException ex) {
-                return;
+                ex.printStackTrace();
             }
 
-            arrMuseum.add(new MuseumView(id, image, name, place, table, overview, latitude, longitude));
+            arrMuseum.add(
+                    new MuseumView(
+                            id,
+                            table + "/overview/" + image,
+                            name,
+                            place,
+                            table,
+                            overview,
+                            latitude,
+                            longitude));
         }
         while (cursor.moveToNext());
         cursor.close();

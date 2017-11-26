@@ -18,7 +18,11 @@
     <!-- Squad theme CSS -->
     <link href="css/style_home.css" rel="stylesheet">
 	  <link href="color/default.css" rel="stylesheet">
+    <link href="./css/layout.css" rel="stylesheet">
     <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBgc26IjUkPAlqWxdRshHWs3QsDyFI0PfE&callback=myMap"></script>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
 </head>
 
 <!-- <img src="./img/fixed.png" alt="Logo MuseS" style="position: fixed; bottom: 0px; left: 0px; z-index: 10000;"> -->
@@ -119,10 +123,23 @@
     <div class="heading-map">
       <div class="container">
       <div class="row">
-        <div class="col-lg-8 col-lg-offset-2">
+
+        <div class="col-lg-12">
           <div class="wow bounceInDown" data-wow-delay="0.4s">
           <div class="section-heading">
+            <button type="button" onclick="myFilter()" class="" style="position: fixed; top: 10px; left: 0px">
+              <span class="glyphicon glyphicon-search"></span> Search</button>
+            <div id="myDropdown" class="dropdown-content" style="position: absolute; z-index: -1; top 40px;">
+              <input type="text" placeholder="Search.." id="myInput" onkeyup="filterFunction()">
+              <a href="#leo">Leonardo da Vinci</a>
+              <a href="#pab">Pablo Picasso</a>
+
+            </div>
+            <!-- <form onclick="" >
+              <input placeholder=" Search...">
+            </form> -->
           <h2>Find Museum</h2>
+
 
           </div>
           </div>
@@ -403,7 +420,7 @@
 
 		</div>
 	</section>
-	<!-- /Section: contact -->
+
 
 	<!-- <footer>
 		<div class="container">

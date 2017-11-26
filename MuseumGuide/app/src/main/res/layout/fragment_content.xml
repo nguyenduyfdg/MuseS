@@ -3,7 +3,8 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@null"
-    android:padding="@dimen/text_content_margin">
+    android:padding="@dimen/text_content_margin"
+    android:id="@+id/fragment_content">
 
     <ScrollView
         android:layout_width="match_parent"
@@ -14,7 +15,8 @@
             android:id="@+id/txtFragment"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textSize="@dimen/text_content"/>
+            android:textSize="@dimen/text_content"
+            android:layout_gravity="center_horizontal"/>
 
     </ScrollView>
 

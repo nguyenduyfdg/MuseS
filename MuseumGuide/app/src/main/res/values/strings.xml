@@ -60,4 +60,8 @@
     <string name="search_dialog_vi">Nhập tên Bảo tàng</string>
     <string name="ok_dialog">OK</string>
 
+    <!--ContentFragment-->
+    <string name="loading_content_en">Loading…</string>
+    <string name="loading_content_vi">Đang tải…</string>
+
 </resources>

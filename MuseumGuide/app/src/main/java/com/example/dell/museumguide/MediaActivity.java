@@ -6,7 +6,6 @@ import android.content.ComponentName;
 import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
-import android.content.res.AssetFileDescriptor;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Color;
@@ -79,9 +78,10 @@ public class MediaActivity extends AppCompatActivity implements BeaconConsumer {
     SeekBar seekBar;
 
     ViewPager viewPager;
-    ImageView imgPageChange;
     private Animation pageChange1;
     private Animation pageChange2;
+    ImageView imgPage1;
+    ImageView imgPage2;
 
     static UpdateCurrent updateCurrent;
 
@@ -95,12 +95,13 @@ public class MediaActivity extends AppCompatActivity implements BeaconConsumer {
     boolean favorite;
     int id;
     String address;
+    String base;
 
-    String cont = "";
-
-    String DATABASE_NAME = "dbMuseums.sqlite";
+    String DATABASE_NAME = "dbMuseums_1.sqlite";
     private static final String DB_PATH_SUFFIX = "/databases/";
     SQLiteDatabase database=null;
+
+    String BASE_URL = "http://www.projecthost.online/database/";
 
     boolean auto;
     boolean dark;
@@ -110,7 +111,7 @@ public class MediaActivity extends AppCompatActivity implements BeaconConsumer {
     boolean userTouch = false;
     static boolean screenOn;
 
-    int outRssi = 0;
+    int outRSSI = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -138,7 +139,7 @@ public class MediaActivity extends AppCompatActivity implements BeaconConsumer {
         screenOn = true;
 
         updateCurrent = new UpdateCurrent();
-        updateCurrent.execute();
+        updateCurrent.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
 
         if (auto){
             beaconConfigure();
@@ -182,13 +183,17 @@ public class MediaActivity extends AppCompatActivity implements BeaconConsumer {
         btnPlay.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startup.stop();
-
-                if (sound.isPlaying()){
-                    sound.pause();
+                if (startup != null) {
+                    startup.stop();
                 }
-                else {
-                    sound.start();
+
+                if (sound != null) {
+                    if (sound.isPlaying()){
+                        sound.pause();
+                    }
+                    else {
+                        sound.start();
+                    }
                 }
             }
         });
@@ -240,18 +245,18 @@ public class MediaActivity extends AppCompatActivity implements BeaconConsumer {
                 switch (position) {
                     case 0:
                         if (dark) {
-                            changePageAnimation(R.drawable.second_slide_white, R.drawable.first_slide_white);
+                            changePageAnimation(R.drawable.unchosen_slide_white, R.drawable.chosen_slide_white);
                         }
                         else {
-                            changePageAnimation(R.drawable.second_slide_black, R.drawable.first_slide_black);
+                            changePageAnimation(R.drawable.unchosen_slide_black, R.drawable.chosen_slide_black);
                         }
                         break;
                     case 1:
                         if (dark) {
-                            changePageAnimation(R.drawable.first_slide_white, R.drawable.second_slide_white);
+                            changePageAnimation(R.drawable.chosen_slide_white, R.drawable.unchosen_slide_white);
                         }
                         else {
-                            changePageAnimation(R.drawable.first_slide_black, R.drawable.second_slide_black);
+                            changePageAnimation(R.drawable.chosen_slide_black, R.drawable.unchosen_slide_black);
                         }
                         break;
                 }
@@ -276,40 +281,6 @@ public class MediaActivity extends AppCompatActivity implements BeaconConsumer {
         txtTitle = (TextView) findViewById(R.id.txtTitle);
         txtTitle.setText(title);
 
-        try {
-            // Get background image
-            InputStream inputStream = getAssets().open(background);
-            Drawable drawable = Drawable.createFromStream(inputStream,null);
-            background_media.setImageDrawable(drawable);
-
-            // Get artifact's content
-            InputStream inputStream1 = getAssets().open(path+"/"+language+"/"+content);
-            int size1 = inputStream1.available();
-            byte[] buf1 = new byte[size1];
-            inputStream1.read(buf1);
-            inputStream1.close();
-            cont = new String(buf1);
-
-            // Get artifact's sound content
-            AssetFileDescriptor afd = getAssets().openFd(path+"/"+language+"/"+media);
-            sound = new MediaPlayer();
-            sound.setDataSource(afd.getFileDescriptor(),afd.getStartOffset(),afd.getLength());
-            sound.prepare();
-            sound.start();
-            SystemClock.sleep(50);
-            sound.pause();
-
-            // Get artifact's sound name
-            AssetFileDescriptor afd1 = getAssets().openFd(start);
-            startup = new MediaPlayer();
-            startup.setDataSource(afd1.getFileDescriptor(),afd1.getStartOffset(),afd1.getLength());
-            startup.prepare();
-            startup.start();
-        }
-        catch (IOException e) {
-            e.printStackTrace();
-        }
-
         btnPlay = (ImageButton) findViewById(R.id.btnPlay);
 
         btnFav = (ImageButton) findViewById(R.id.btnFav);
@@ -317,15 +288,50 @@ public class MediaActivity extends AppCompatActivity implements BeaconConsumer {
         txtCurrent = (TextView) findViewById(R.id.txtCurrent);
 
         txtDuration = (TextView) findViewById(R.id.txtDuration);
-        txtDuration.setText(msToString(sound.getDuration()));
 
         seekBar = (SeekBar) findViewById(R.id.seekBar);
-        seekBar.setMax(sound.getDuration());
 
-        viewPager = (ViewPager) findViewById(R.id.viewPager);
-        viewPager.setAdapter(new MyPagerAdapter(getSupportFragmentManager()));
+        try {
+            // Get background image
+            InputStream inputStream = getAssets().open(background);
+            Drawable drawable = Drawable.createFromStream(inputStream,null);
+            background_media.setImageDrawable(drawable);
+        }
+        catch (IOException e) {
+            e.printStackTrace();
+        }
 
-        imgPageChange = (ImageView) findViewById(R.id.imgPageChange);
+        try {
+            // Get artifact's sound content
+            sound = new MediaPlayer();
+            sound.setDataSource(BASE_URL + path + "/" + base + "/" + language + media);
+            sound.prepare();
+
+            seekBar.setMax(sound.getDuration());
+            seekBar.setClickable(true);
+
+            txtDuration.setText(msToString(sound.getDuration()));
+
+            btnPlay.setAlpha(1f);
+            btnPlay.setClickable(true);
+        }
+        catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        try {
+            // Get artifact's sound name
+            startup = new MediaPlayer();
+            startup.setDataSource(BASE_URL + path + "/" + base + "/" + start);
+            startup.prepare();
+            startup.start();
+        }
+        catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        imgPage1 = (ImageView) findViewById(R.id.imgPage1);
+        imgPage2 = (ImageView) findViewById(R.id.imgPage2);
 
         pageChange1 = AnimationUtils.loadAnimation(MediaActivity.this, R.anim.page_change_state_one);
         pageChange2 = AnimationUtils.loadAnimation(MediaActivity.this, R.anim.page_change_state_two);
@@ -335,23 +341,35 @@ public class MediaActivity extends AppCompatActivity implements BeaconConsumer {
             txtTitle.setTextColor(Color.WHITE);
             txtCurrent.setTextColor(Color.WHITE);
             txtDuration.setTextColor(Color.WHITE);
-            imgPageChange.setImageResource(R.drawable.first_slide_white);
             activity_media.setBackgroundResource(android.R.color.black);
+
+            imgPage1.setImageResource(R.drawable.chosen_slide_white);
+            imgPage2.setImageResource(R.drawable.unchosen_slide_white);
         }
         else {
             txtTitle.setTextColor(Color.BLACK);
             txtCurrent.setTextColor(Color.BLACK);
             txtDuration.setTextColor(Color.BLACK);
-            imgPageChange.setImageResource(R.drawable.first_slide_black);
             activity_media.setBackgroundResource(android.R.color.white);
+
+            imgPage1.setImageResource(R.drawable.chosen_slide_black);
+            imgPage2.setImageResource(R.drawable.unchosen_slide_black);
         }
+
+        viewPager = (ViewPager) findViewById(R.id.viewPager);
+        viewPager.setAdapter(new MyPagerAdapter(getSupportFragmentManager()));
     }
 
     private void changePageAnimation(int state1, int state2) {
-        imgPageChange.setImageResource(state1);
-        imgPageChange.startAnimation(pageChange1);
-        imgPageChange.setImageResource(state2);
-        imgPageChange.startAnimation(pageChange2);
+        imgPage1.setImageResource(state1);
+        imgPage1.startAnimation(pageChange1);
+        imgPage1.setImageResource(state2);
+        imgPage1.startAnimation(pageChange2);
+
+        imgPage2.setImageResource(state2);
+        imgPage2.startAnimation(pageChange1);
+        imgPage2.setImageResource(state1);
+        imgPage2.startAnimation(pageChange2);
     }
 
     private class MyPagerAdapter extends FragmentPagerAdapter {
@@ -364,11 +382,19 @@ public class MediaActivity extends AppCompatActivity implements BeaconConsumer {
         public Fragment getItem(int pos) {
             switch(pos) {
                 case 0:
-                    return ImageFragment.newInstance(image);
+                    return ImageFragment.newInstance(BASE_URL + path + "/" + base + "/" + image, dark);
                 case 1:
-                    return ContentFragment.newInstance(cont, dark);
+                    return ContentFragment.newInstance(
+                            BASE_URL + path + "/" + base + "/" + language + content,
+                            dark,
+                            language
+                    );
                 default:
-                    return ContentFragment.newInstance(cont, dark);
+                    return ContentFragment.newInstance(
+                            BASE_URL + path + "/" + base + "/" + language + content,
+                            dark,
+                            language
+                    );
             }
         }
 
@@ -484,12 +510,12 @@ public class MediaActivity extends AppCompatActivity implements BeaconConsumer {
                         );
 
                         if (oneBeacon.getRssi() < -60) {
-                            outRssi++;
-                            Log.i(BEACON_TAG, String.valueOf(outRssi));
+                            outRSSI++;
+                            Log.i(BEACON_TAG, String.valueOf(outRSSI));
                         }
 
-                        if (outRssi >= 6) {
-                            outRssi = 0;
+                        if (outRSSI >= 6) {
+                            outRSSI = 0;
 
                             if (!sound.isPlaying()) {
                                 updateCurrent.cancel(true);
@@ -613,7 +639,7 @@ public class MediaActivity extends AppCompatActivity implements BeaconConsumer {
 
     private void getDataFromDatabase() {
         database = openOrCreateDatabase(DATABASE_NAME,MODE_PRIVATE,null);
-        Cursor cursor = database.rawQuery("SELECT * FROM " +path+ " WHERE id=?",new String[]{id+""});
+        Cursor cursor = database.rawQuery("SELECT * FROM " + path + " WHERE id=?",new String[]{id+""});
         while (cursor.moveToNext()){
             image = cursor.getString(3);
             title = cursor.getString(1);
@@ -622,6 +648,7 @@ public class MediaActivity extends AppCompatActivity implements BeaconConsumer {
             media = cursor.getString(4);
             favorite = cursor.getInt(7) != 0;
             address = cursor.getString(6);
+            base = cursor.getString(8);
         }
         cursor.close();
 

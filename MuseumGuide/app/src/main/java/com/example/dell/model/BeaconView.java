@@ -1,9 +1,5 @@
 package com.example.dell.model;
 
-/**
- * Created by admin on 10/28/2017.
- */
-
 public class BeaconView {
     private String address;
     int rssi;

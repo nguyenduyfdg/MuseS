@@ -2,10 +2,6 @@ package com.example.dell.model;
 
 import java.util.ArrayList;
 
-/**
- * Created by DELL on 4/2/2017.
- */
-
 public class FavoriteMuseumView {
     private int id;
     private String image;

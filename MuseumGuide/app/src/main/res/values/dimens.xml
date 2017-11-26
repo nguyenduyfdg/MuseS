@@ -1,9 +1,14 @@
 <resources>
+
     <dimen name="fab_margin">16dp</dimen>
     <dimen name="activity_horizontal_margin">16dp</dimen>
     <dimen name="activity_vertical_margin">16dp</dimen>
     <dimen name="activity_margin">16dp</dimen>
+    <dimen name="text_content_margin">5dp</dimen>
+
     <dimen name="image_button_size">28dp</dimen>
+    <dimen name="image_button_half_size">14dp</dimen>
+    
     <dimen name="image_button_margin">10dp</dimen>
     <dimen name="image_button_vertical_margin">10dp</dimen>
     <dimen name="image_button_horizontal_margin">10dp</dimen>
@@ -18,4 +23,5 @@
     <item name="background_alpha" format="float" type="dimen">0.6</item>
     <dimen name="app_bar_height">180dp</dimen>
     <dimen name="text_margin">16dp</dimen>
+
 </resources>

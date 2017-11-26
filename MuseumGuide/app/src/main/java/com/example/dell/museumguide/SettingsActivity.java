@@ -23,7 +23,6 @@ import java.io.InputStream;
 import java.io.OutputStream;
 
 public class SettingsActivity extends AppCompatActivity {
-
     String DATABASE_NAME="dbMuseums.sqlite";
     private static final String DB_PATH_SUFFIX = "/databases/";
     SQLiteDatabase database=null;
@@ -156,20 +155,20 @@ public class SettingsActivity extends AppCompatActivity {
             case "english":
                 btnEnglish.setChecked(true);
 
-                txtSettings.setText(R.string.text_settings_en);
-                txtBackground.setText(R.string.text_background_en);
-                txtLanguage.setText(R.string.text_language_en);
-                swAuto.setText(R.string.text_auto_en);
-                swDark.setText(R.string.text_dark_en);
+                txtSettings.setText(R.string.settings_settings_en);
+                txtBackground.setText(R.string.background_settings_en);
+                txtLanguage.setText(R.string.language_settings_en);
+                swAuto.setText(R.string.auto_settings_en);
+                swDark.setText(R.string.dark_settings_en);
                 break;
             case "vietnamese":
                 btnVietnamese.setChecked(true);
 
-                txtSettings.setText(R.string.text_settings_vi);
-                txtBackground.setText(R.string.text_background_vi);
-                txtLanguage.setText(R.string.text_language_vi);
-                swAuto.setText(R.string.text_auto_vi);
-                swDark.setText(R.string.text_dark_vi);
+                txtSettings.setText(R.string.settings_settings_vi);
+                txtBackground.setText(R.string.background_settings_vi);
+                txtLanguage.setText(R.string.language_settings_vi);
+                swAuto.setText(R.string.auto_settings_vi);
+                swDark.setText(R.string.dark_settings_vi);
                 break;
         }
 
@@ -348,22 +347,22 @@ public class SettingsActivity extends AppCompatActivity {
                 if (checked){
                     language = "english";
 
-                    txtSettings.setText(R.string.text_settings_en);
-                    txtBackground.setText(R.string.text_background_en);
-                    txtLanguage.setText(R.string.text_language_en);
-                    swAuto.setText(R.string.text_auto_en);
-                    swDark.setText(R.string.text_dark_en);
+                    txtSettings.setText(R.string.settings_settings_en);
+                    txtBackground.setText(R.string.background_settings_en);
+                    txtLanguage.setText(R.string.language_settings_en);
+                    swAuto.setText(R.string.auto_settings_en);
+                    swDark.setText(R.string.dark_settings_en);
                 }
                 break;
             case R.id.btnVietnamese:
                 if (checked){
                     language = "vietnamese";
 
-                    txtSettings.setText(R.string.text_settings_vi);
-                    txtBackground.setText(R.string.text_background_vi);
-                    txtLanguage.setText(R.string.text_language_vi);
-                    swAuto.setText(R.string.text_auto_vi);
-                    swDark.setText(R.string.text_dark_vi);
+                    txtSettings.setText(R.string.settings_settings_vi);
+                    txtBackground.setText(R.string.background_settings_vi);
+                    txtLanguage.setText(R.string.language_settings_vi);
+                    swAuto.setText(R.string.auto_settings_vi);
+                    swDark.setText(R.string.dark_settings_vi);
                 }
                 break;
         }

@@ -1,5 +1,6 @@
 package com.example.dell.adapter;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.graphics.Color;
 import android.graphics.drawable.Drawable;
@@ -17,10 +18,6 @@ import com.example.dell.museumguide.R;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
-
-/**
- * Created by DELL on 4/5/2017.
- */
 
 public class LightFavoriteAdapter extends BaseExpandableListAdapter {
 
@@ -69,6 +66,7 @@ public class LightFavoriteAdapter extends BaseExpandableListAdapter {
         return true;
     }
 
+    @SuppressLint("InflateParams")
     @Override
     public View getGroupView(int groupPosition, boolean isExpanded, View convertView, ViewGroup parent) {
         convertView = inflater.inflate(R.layout.list_museum,null);
@@ -102,6 +100,7 @@ public class LightFavoriteAdapter extends BaseExpandableListAdapter {
         return convertView;
     }
 
+    @SuppressLint("InflateParams")
     @Override
     public View getChildView(int groupPosition, int childPosition, boolean isLastChild, View convertView, ViewGroup parent) {
         convertView = inflater.inflate(R.layout.list_artifact,null);

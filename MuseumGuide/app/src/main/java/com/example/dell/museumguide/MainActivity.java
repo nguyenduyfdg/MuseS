@@ -63,17 +63,6 @@ public class MainActivity extends AppCompatActivity {
         processCopy();
         getSettingsFromDatabase();
         checkPermissions();
-        checkEnableBluetooth();
-    }
-
-    private void checkEnableBluetooth() {
-        if (auto){
-            BluetoothAdapter bluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
-            if (!bluetoothAdapter.isEnabled()){
-                Intent enableBtIntent = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
-                startActivityIfNeeded(enableBtIntent, REQUEST_ENABLE_BLUETOOTH);
-            }
-        }
     }
 
     private void checkPermissions() {
@@ -83,7 +72,10 @@ public class MainActivity extends AppCompatActivity {
                 Manifest.permission.BLUETOOTH,
                 Manifest.permission.BLUETOOTH_ADMIN,
                 Manifest.permission.MODIFY_AUDIO_SETTINGS,
-                Manifest.permission.MEDIA_CONTENT_CONTROL
+                Manifest.permission.MEDIA_CONTENT_CONTROL,
+                Manifest.permission.INTERNET,
+                Manifest.permission.ACCESS_NETWORK_STATE,
+                Manifest.permission.ACCESS_WIFI_STATE
         };
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
@@ -184,16 +176,16 @@ public class MainActivity extends AppCompatActivity {
 
         switch (language){
             case "english":
-                txtMuseum.setText(R.string.text_museum_en);
-                txtMap.setText(R.string.text_map_en);
-                txtFavorite.setText(R.string.text_favorite_en);
-                txtSettings.setText(R.string.text_settings_en);
+                txtMuseum.setText(R.string.museums_main_en);
+                txtMap.setText(R.string.maps_main_en);
+                txtFavorite.setText(R.string.favorites_main_en);
+                txtSettings.setText(R.string.settings_main_en);
                 break;
             case "vietnamese":
-                txtMuseum.setText(R.string.text_museum_vi);
-                txtMap.setText(R.string.text_map_vi);
-                txtFavorite.setText(R.string.text_favorite_vi);
-                txtSettings.setText(R.string.text_settings_vi);
+                txtMuseum.setText(R.string.museums_main_vi);
+                txtMap.setText(R.string.maps_main_vi);
+                txtFavorite.setText(R.string.favorites_main_vi);
+                txtSettings.setText(R.string.settings_main_vi);
                 break;
         }
 

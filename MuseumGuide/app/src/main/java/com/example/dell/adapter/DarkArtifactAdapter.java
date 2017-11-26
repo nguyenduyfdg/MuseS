@@ -1,5 +1,6 @@
 package com.example.dell.adapter;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.graphics.Color;
 import android.graphics.drawable.Drawable;
@@ -20,15 +21,11 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.List;
 
-/**
- * Created by DELL on 3/20/2017.
- */
-
 public class DarkArtifactAdapter extends ArrayAdapter<ArtifactView> {
 
-    Activity activity;
-    int resource;
-    List<ArtifactView> objects;
+    private Activity activity;
+    private int resource;
+    private List<ArtifactView> objects;
 
     public DarkArtifactAdapter(@NonNull Activity activity, @LayoutRes int resource, @NonNull List<ArtifactView> objects) {
         super(activity, resource, objects);
@@ -42,7 +39,7 @@ public class DarkArtifactAdapter extends ArrayAdapter<ArtifactView> {
     @Override
     public View getView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
         LayoutInflater inflater = this.activity.getLayoutInflater();
-        View row = inflater.inflate(this.resource,null);
+        @SuppressLint("ViewHolder") View row = inflater.inflate(this.resource,null);
 
         TextView txtArtTitle = (TextView) row.findViewById(R.id.txtArtTitle);
         ImageView imgArt = (ImageView) row.findViewById(R.id.imgArt);

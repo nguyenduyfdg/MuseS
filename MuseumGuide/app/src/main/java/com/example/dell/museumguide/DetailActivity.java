@@ -1,5 +1,6 @@
 package com.example.dell.museumguide;
 
+import android.bluetooth.BluetoothAdapter;
 import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
@@ -49,10 +50,11 @@ import java.util.ArrayList;
 import java.util.Collection;
 
 public class DetailActivity extends AppCompatActivity implements OnMapReadyCallback, BeaconConsumer {
+    private static final int REQUEST_ENABLE_BLUETOOTH = 1;
 
     String DATABASE_NAME="dbMuseums.sqlite";
     private static final String DB_PATH_SUFFIX = "/databases/";
-    SQLiteDatabase database=null;
+    SQLiteDatabase database = null;
 
     public static final String TAG = "BeaconsEverywhere";
     private BeaconManager beaconManager = null;
@@ -134,7 +136,7 @@ public class DetailActivity extends AppCompatActivity implements OnMapReadyCallb
         getTimeFromDatabase();
         getTicketFromDatabase();
 
-
+        checkEnableBluetooth();
     }
 
     @Override
@@ -146,6 +148,16 @@ public class DetailActivity extends AppCompatActivity implements OnMapReadyCallb
 
             if (!beaconManager.isBound(this)){
                 beaconManager.bind(this);
+            }
+        }
+    }
+
+    private void checkEnableBluetooth() {
+        if (auto){
+            BluetoothAdapter bluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
+            if (!bluetoothAdapter.isEnabled()){
+                Intent enableBtIntent = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
+                startActivityIfNeeded(enableBtIntent, REQUEST_ENABLE_BLUETOOTH);
             }
         }
     }
@@ -162,6 +174,16 @@ public class DetailActivity extends AppCompatActivity implements OnMapReadyCallb
         lvArtifact.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                if (auto) {
+                    beaconList.clear();
+
+                    if (beaconManager.isBound(DetailActivity.this)){
+                        beaconManager.unbind(DetailActivity.this);
+                        beaconManager.removeAllMonitorNotifiers();
+                        beaconManager.removeAllRangeNotifiers();
+                    }
+                }
+
                 ArtifactView item = (ArtifactView) parent.getItemAtPosition(position);
                 int x = item.getId();
 
@@ -301,12 +323,12 @@ public class DetailActivity extends AppCompatActivity implements OnMapReadyCallb
 
         switch (language){
             case "english":
-                txtArtifactList.setText(R.string.text_artifact_list_en);
-                txtOverview.setText(R.string.text_overview_en);
-                txtAddress.setText(R.string.text_address_en);
-                txtContract.setText(R.string.text_contract_en);
-                txtTime.setText(R.string.text_time_en);
-                txtTicket.setText(R.string.text_ticket_en);
+                txtArtifactList.setText(R.string.artifacts_list_detail_en);
+                txtOverview.setText(R.string.overview_detail_en);
+                txtAddress.setText(R.string.address_detail_en);
+                txtContract.setText(R.string.contract_detail_en);
+                txtTime.setText(R.string.time_detail_en);
+                txtTicket.setText(R.string.ticket_detail_en);
 
                 tabOverview.setIndicator("Overview");
                 tabMap.setIndicator("Map");
@@ -314,12 +336,12 @@ public class DetailActivity extends AppCompatActivity implements OnMapReadyCallb
 
                 break;
             case "vietnamese":
-                txtArtifactList.setText(R.string.text_artifact_list_vi);
-                txtOverview.setText(R.string.text_overview_vi);
-                txtAddress.setText(R.string.text_address_vi);
-                txtContract.setText(R.string.text_contract_vi);
-                txtTime.setText(R.string.text_time_vi);
-                txtTicket.setText(R.string.text_ticket_vi);
+                txtArtifactList.setText(R.string.artifacts_list_detail_vi);
+                txtOverview.setText(R.string.overview_detail_vi);
+                txtAddress.setText(R.string.address_detail_vi);
+                txtContract.setText(R.string.contract_detail_vi);
+                txtTime.setText(R.string.time_detail_vi);
+                txtTicket.setText(R.string.ticket_detail_vi);
 
                 tabOverview.setIndicator("Tổng quan");
                 tabMap.setIndicator("Bản đồ");
@@ -507,7 +529,7 @@ public class DetailActivity extends AppCompatActivity implements OnMapReadyCallb
 
     public Bitmap resizeMapIcons() {
         Bitmap imageBitmap = BitmapFactory.decodeResource(getResources(), getResources().getIdentifier("museum_red", "drawable", getPackageName()));
-        return Bitmap.createScaledBitmap(imageBitmap, 80, 80, false);
+        return Bitmap.createScaledBitmap(imageBitmap, 60, 60, false);
     }
 
     @Override
@@ -571,22 +593,24 @@ public class DetailActivity extends AppCompatActivity implements OnMapReadyCallb
                 Log.i(TAG,"didRangeBeaconsInRegion " + beacons.size());
                 if (beacons.size() > 0){
                     for (Beacon oneBeacon : beacons) {
-                        beaconList.add(new BeaconView(
-                                oneBeacon.getId1() + "/" + oneBeacon.getId2() + "/" + oneBeacon.getId3(),
-                                oneBeacon.getRssi()
-                                )
-                        );
-                        Log.i(
-                                TAG,
-                                " RSSI: " +
-                                        oneBeacon.getRssi() +
-                                        " ID: " +
-                                        oneBeacon.getId1() +
-                                        "/" +
-                                        oneBeacon.getId2() +
-                                        "/" +
-                                        oneBeacon.getId3()
-                        );
+                        if (oneBeacon.getRssi() > -60) {
+                            beaconList.add(new BeaconView(
+                                            oneBeacon.getId1() + "/" + oneBeacon.getId2() + "/" + oneBeacon.getId3(),
+                                            oneBeacon.getRssi()
+                                    )
+                            );
+                            Log.i(
+                                    TAG,
+                                    " RSSI: " +
+                                            oneBeacon.getRssi() +
+                                            " ID: " +
+                                            oneBeacon.getId1() +
+                                            "/" +
+                                            oneBeacon.getId2() +
+                                            "/" +
+                                            oneBeacon.getId3()
+                            );
+                        }
                     }
 
                     if (beaconList.size() >= 6) {

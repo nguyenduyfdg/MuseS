@@ -139,10 +139,10 @@ public class FavoritesActivity extends AppCompatActivity {
 
         switch (language){
             case "english":
-                txtFavorites.setText(R.string.text_favorites_list_en);
+                txtFavorites.setText(R.string.favorites_list_favorites_en);
                 break;
             case "vietnamese":
-                txtFavorites.setText(R.string.text_favorites_list_vi);
+                txtFavorites.setText(R.string.favorites_list_favorites_vi);
                 break;
         }
 

@@ -137,10 +137,10 @@ public class MuseumsActivity extends AppCompatActivity {
 
         switch (language){
             case "english":
-                txtMuseumList.setText(R.string.text_museum_list_en);
+                txtMuseumList.setText(R.string.museums_list_museums_en);
                 break;
             case "vietnamese":
-                txtMuseumList.setText(R.string.text_museum_list_vi);
+                txtMuseumList.setText(R.string.museums_list_museums_vi);
                 break;
         }
 

@@ -1,9 +1,5 @@
 package com.example.dell.model;
 
-/**
- * Created by DELL on 3/19/2017.
- */
-
 public class MuseumView {
     private int id;
     private String image;

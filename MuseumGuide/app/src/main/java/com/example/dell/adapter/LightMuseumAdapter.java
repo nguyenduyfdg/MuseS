@@ -1,5 +1,6 @@
 package com.example.dell.adapter;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.graphics.Color;
 import android.graphics.drawable.Drawable;
@@ -20,15 +21,11 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.List;
 
-/**
- * Created by DELL on 3/19/2017.
- */
-
 public class LightMuseumAdapter extends ArrayAdapter<MuseumView> {
 
-    Activity activity;
-    int resource;
-    List<MuseumView> objects;
+    private Activity activity;
+    private int resource;
+    private List<MuseumView> objects;
 
     public LightMuseumAdapter(@NonNull Activity activity, @LayoutRes int resource, @NonNull List<MuseumView> objects) {
         super(activity, resource, objects);
@@ -42,7 +39,7 @@ public class LightMuseumAdapter extends ArrayAdapter<MuseumView> {
     @Override
     public View getView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
         LayoutInflater inflater = this.activity.getLayoutInflater();
-        View row = inflater.inflate(this.resource,null);
+        @SuppressLint("ViewHolder") View row = inflater.inflate(this.resource,null);
 
         TextView txtListName = (TextView) row.findViewById(R.id.txtListName);
         TextView txtListAddress = (TextView) row.findViewById(R.id.txtListAddress);

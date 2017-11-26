@@ -1,0 +1,1 @@
+"./Beacon.o" "./charset.o" "./DFPlayer_Mini_Mp3.o" "./PCD8544.o" "./TEST_ONLY.o" -Wl,--start-group -llpmsp430f5529_core -lm -Wl,--end-group 

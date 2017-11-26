@@ -8,10 +8,6 @@ import android.view.KeyEvent;
 
 import com.example.dell.museumguide.MediaActivity;
 
-/**
- * Created by admin on 7/4/2017.
- */
-
 public class MediaButtonReceiver extends BroadcastReceiver {
     String TAG = "MediaButtonPressed";
 

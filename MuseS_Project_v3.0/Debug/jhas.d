@@ -1,0 +1,1 @@
+jhas.o: ../jhas.cpp

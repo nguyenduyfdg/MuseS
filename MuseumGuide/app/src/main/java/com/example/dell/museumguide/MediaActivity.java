@@ -18,19 +18,25 @@ import android.os.Bundle;
 import android.os.RemoteException;
 import android.os.SystemClock;
 import android.support.annotation.NonNull;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.content.ContextCompat;
+import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
-import android.widget.ScrollView;
 import android.widget.SeekBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.example.dell.model.BeaconView;
+import com.example.dell.adapter.ContentFragment;
+import com.example.dell.adapter.ImageFragment;
 import com.example.dell.model.MediaButtonReceiver;
 
 import org.altbeacon.beacon.Beacon;
@@ -56,24 +62,26 @@ public class MediaActivity extends AppCompatActivity implements BeaconConsumer {
 
     public static final String BEACON_TAG = "BeaconsEverywhere";
     private BeaconManager beaconManager = null;
-    String id1;
-    String id2;
-    String id3;
+    String id1 = "";
+    String id2 = "";
+    String id3 = "";
 
     public static MediaPlayer startup;
     public static MediaPlayer sound;
 
     RelativeLayout activity_media;
     ImageView background_media;
-    ScrollView scrMedia;
     TextView txtTitle;
-    TextView txtContent;
-    ImageView imgArtifact;
     ImageButton btnPlay;
     ImageButton btnFav;
     TextView txtCurrent;
     TextView txtDuration;
     SeekBar seekBar;
+
+    ViewPager viewPager;
+    ImageView imgPageChange;
+    private Animation pageChange1;
+    private Animation pageChange2;
 
     static UpdateCurrent updateCurrent;
 
@@ -88,6 +96,8 @@ public class MediaActivity extends AppCompatActivity implements BeaconConsumer {
     int id;
     String address;
 
+    String cont = "";
+
     String DATABASE_NAME = "dbMuseums.sqlite";
     private static final String DB_PATH_SUFFIX = "/databases/";
     SQLiteDatabase database=null;
@@ -99,6 +109,8 @@ public class MediaActivity extends AppCompatActivity implements BeaconConsumer {
 
     boolean userTouch = false;
     static boolean screenOn;
+
+    int outRssi = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -217,6 +229,38 @@ public class MediaActivity extends AppCompatActivity implements BeaconConsumer {
                 database.update(path,contentValues,"id=?",new String[]{id+""});
             }
         });
+
+        viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+            @Override
+            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+            }
+
+            @Override
+            public void onPageSelected(int position) {
+                switch (position) {
+                    case 0:
+                        if (dark) {
+                            changePageAnimation(R.drawable.second_slide_white, R.drawable.first_slide_white);
+                        }
+                        else {
+                            changePageAnimation(R.drawable.second_slide_black, R.drawable.first_slide_black);
+                        }
+                        break;
+                    case 1:
+                        if (dark) {
+                            changePageAnimation(R.drawable.first_slide_white, R.drawable.second_slide_white);
+                        }
+                        else {
+                            changePageAnimation(R.drawable.first_slide_black, R.drawable.second_slide_black);
+                        }
+                        break;
+                }
+            }
+
+            @Override
+            public void onPageScrollStateChanged(int state) {
+            }
+        });
     }
 
     private void addControls() {
@@ -232,9 +276,6 @@ public class MediaActivity extends AppCompatActivity implements BeaconConsumer {
         txtTitle = (TextView) findViewById(R.id.txtTitle);
         txtTitle.setText(title);
 
-        imgArtifact = (ImageView) findViewById(R.id.imgArtifact);
-
-        String cont = null;
         try {
             // Get background image
             InputStream inputStream = getAssets().open(background);
@@ -264,18 +305,10 @@ public class MediaActivity extends AppCompatActivity implements BeaconConsumer {
             startup.setDataSource(afd1.getFileDescriptor(),afd1.getStartOffset(),afd1.getLength());
             startup.prepare();
             startup.start();
-
-            // Get artifact's image
-            InputStream ims = getAssets().open(image);
-            Drawable d = Drawable.createFromStream(ims, null);
-            imgArtifact.setImageDrawable(d);
         }
         catch (IOException e) {
             e.printStackTrace();
         }
-
-        txtContent = (TextView) findViewById(R.id.txtContent);
-        txtContent.setText(cont); // Show artifact's content
 
         btnPlay = (ImageButton) findViewById(R.id.btnPlay);
 
@@ -289,23 +322,60 @@ public class MediaActivity extends AppCompatActivity implements BeaconConsumer {
         seekBar = (SeekBar) findViewById(R.id.seekBar);
         seekBar.setMax(sound.getDuration());
 
+        viewPager = (ViewPager) findViewById(R.id.viewPager);
+        viewPager.setAdapter(new MyPagerAdapter(getSupportFragmentManager()));
+
+        imgPageChange = (ImageView) findViewById(R.id.imgPageChange);
+
+        pageChange1 = AnimationUtils.loadAnimation(MediaActivity.this, R.anim.page_change_state_one);
+        pageChange2 = AnimationUtils.loadAnimation(MediaActivity.this, R.anim.page_change_state_two);
+
         // Set color base on Dark Mode on or off
         if (dark){
             txtTitle.setTextColor(Color.WHITE);
-            txtContent.setTextColor(Color.WHITE);
             txtCurrent.setTextColor(Color.WHITE);
             txtDuration.setTextColor(Color.WHITE);
+            imgPageChange.setImageResource(R.drawable.first_slide_white);
             activity_media.setBackgroundResource(android.R.color.black);
         }
         else {
             txtTitle.setTextColor(Color.BLACK);
-            txtContent.setTextColor(Color.BLACK);
             txtCurrent.setTextColor(Color.BLACK);
             txtDuration.setTextColor(Color.BLACK);
+            imgPageChange.setImageResource(R.drawable.first_slide_black);
             activity_media.setBackgroundResource(android.R.color.white);
         }
+    }
 
-        scrMedia = (ScrollView) findViewById(R.id.scrMedia);
+    private void changePageAnimation(int state1, int state2) {
+        imgPageChange.setImageResource(state1);
+        imgPageChange.startAnimation(pageChange1);
+        imgPageChange.setImageResource(state2);
+        imgPageChange.startAnimation(pageChange2);
+    }
+
+    private class MyPagerAdapter extends FragmentPagerAdapter {
+
+        MyPagerAdapter(FragmentManager fm) {
+            super(fm);
+        }
+
+        @Override
+        public Fragment getItem(int pos) {
+            switch(pos) {
+                case 0:
+                    return ImageFragment.newInstance(image);
+                case 1:
+                    return ContentFragment.newInstance(cont, dark);
+                default:
+                    return ContentFragment.newInstance(cont, dark);
+            }
+        }
+
+        @Override
+        public int getCount() {
+            return 2;
+        }
     }
 
     private void getBeaconIdentifiers(String address) {
@@ -327,12 +397,20 @@ public class MediaActivity extends AppCompatActivity implements BeaconConsumer {
 
     @Override
     public void onBeaconServiceConnect() {
-        Region region = new Region(
-                "myBeacon",
-                Identifier.parse(id1),
-                Identifier.parse(id2),
-                Identifier.parse(id3)
-        );
+        Region region;
+
+        if (!id1.equals("") && !id2.equals("") && !id3.equals("")) {
+            region = new Region(
+                    "myBeacon",
+                    Identifier.parse(id1),
+                    Identifier.parse(id2),
+                    Identifier.parse(id3)
+            );
+        }
+        else {
+            region = new Region("myBeacon", null, null, null);
+        }
+
         Log.i(BEACON_TAG,"onBeaconServiceConnect");
 
         beaconManager.addMonitorNotifier(new MonitorNotifier() {
@@ -404,6 +482,37 @@ public class MediaActivity extends AppCompatActivity implements BeaconConsumer {
                                         "/" +
                                         oneBeacon.getId3()
                         );
+
+                        if (oneBeacon.getRssi() < -60) {
+                            outRssi++;
+                            Log.i(BEACON_TAG, String.valueOf(outRssi));
+                        }
+
+                        if (outRssi >= 6) {
+                            outRssi = 0;
+
+                            if (!sound.isPlaying()) {
+                                updateCurrent.cancel(true);
+                                screenOn = false;
+
+                                sound.release();
+                                startup.release();
+
+                                try {
+                                    beaconManager.stopRangingBeaconsInRegion(region);
+                                }
+                                catch (RemoteException e) {
+                                    e.printStackTrace();
+                                }
+
+                                beaconManager.unbind(MediaActivity.this);
+                                beaconManager.removeAllMonitorNotifiers();
+                                beaconManager.removeAllRangeNotifiers();
+
+                                Log.i(BEACON_TAG, "finish()");
+                                finish();
+                            }
+                        }
                     }
                 }
             }

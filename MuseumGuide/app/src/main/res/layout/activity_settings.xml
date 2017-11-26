@@ -70,7 +70,8 @@
                     android:id="@+id/btnBackground"
                     android:orientation="horizontal"
                     android:layout_marginStart="@dimen/activity_horizontal_margin"
-                    android:layout_marginLeft="@dimen/activity_horizontal_margin">
+                    android:layout_marginLeft="@dimen/activity_horizontal_margin"
+                    android:layout_marginBottom="@dimen/activity_vertical_margin">
 
                     <RadioButton
                         android:layout_width="60dp"

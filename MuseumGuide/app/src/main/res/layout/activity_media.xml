@@ -6,17 +6,20 @@
     android:layout_height="match_parent"
     tools:context="com.example.dell.museumguide.MediaActivity"
     android:id="@+id/activity_media">
+
     <ImageView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:scaleType="centerCrop"
         android:adjustViewBounds="true"
         android:id="@+id/background_media"
-        android:alpha="@dimen/background_alpha"/>
+        android:alpha="@dimen/background_alpha" />
+
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:padding="@dimen/activity_margin">
+
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -24,6 +27,7 @@
             android:id="@+id/txtTitle"
             android:layout_centerHorizontal="true"
             android:layout_marginBottom="@dimen/activity_margin"/>
+
         <ImageButton
             android:layout_width="@dimen/image_button_size"
             android:layout_height="@dimen/image_button_size"
@@ -34,8 +38,8 @@
             android:layout_marginEnd="@dimen/image_button_horizontal_margin"
             android:layout_marginRight="@dimen/image_button_horizontal_margin"
             android:background="@null"
-            android:id="@+id/btnPlay"
-            android:onClick="btnPlay_click"/>
+            android:id="@+id/btnPlay"/>
+
         <ImageButton
             android:layout_width="@dimen/image_button_size"
             android:layout_height="@dimen/image_button_size"
@@ -48,8 +52,8 @@
             android:layout_marginStart="@dimen/image_button_horizontal_margin"
             android:layout_marginLeft="@dimen/image_button_horizontal_margin"
             android:background="@null"
-            android:id="@+id/btnFav"
-            android:onClick="btnFav_click"/>
+            android:id="@+id/btnFav"/>
+
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -58,6 +62,7 @@
             android:layout_toRightOf="@id/btnPlay"
             android:textSize="13sp"
             android:id="@+id/txtCurrent"/>
+
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -66,6 +71,7 @@
             android:layout_toLeftOf="@id/btnFav"
             android:textSize="13sp"
             android:id="@+id/txtDuration"/>
+
         <SeekBar
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -75,29 +81,23 @@
             android:layout_toStartOf="@id/txtDuration"
             android:layout_toLeftOf="@id/txtDuration"
             android:id="@+id/seekBar" />
-        <ScrollView
+
+        <ImageView
+            android:layout_width="@dimen/image_button_size"
+            android:layout_height="@dimen/image_button_half_size"
+            android:layout_centerHorizontal="true"
+            android:layout_above="@id/btnPlay"
+            android:adjustViewBounds="true"
+            android:scaleType="fitCenter"
+            android:id="@+id/imgPageChange"/>
+
+        <android.support.v4.view.ViewPager
+            android:id="@+id/viewPager"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:minHeight="@dimen/activity_vertical_margin"
             android:layout_below="@id/txtTitle"
-            android:layout_above="@id/btnPlay"
-            android:id="@+id/scrMedia">
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="vertical">
-                <ImageView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:id="@+id/imgArtifact"
-                    android:scaleType="fitCenter"
-                    android:adjustViewBounds="true" />
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:textSize="16sp"
-                    android:id="@+id/txtContent"/>
-            </LinearLayout>
-        </ScrollView>
+            android:layout_above="@id/imgPageChange"/>
+
     </RelativeLayout>
+
 </RelativeLayout>

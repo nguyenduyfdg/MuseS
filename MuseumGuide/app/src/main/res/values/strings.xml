@@ -1,133 +1,63 @@
 <resources>
     <string name="app_name">Museum Guide</string>
-    <string name="title_activity_main2">Main2Activity</string>
-    <string name="title_activity_maps">Map</string>
 
-    <string name="text_museum_en">Museums</string>
-    <string name="text_map_en">Map</string>
-    <string name="text_favorite_en">Favorites</string>
-    <string name="text_settings_en">Settings</string>
-    <string name="text_close_en">Close</string>
-    <string name="text_museum_list_en">Museums List</string>
-    <string name="text_artifact_list_en">Artifacts List</string>
-    <string name="text_overview_en">Overview</string>
-    <string name="text_address_en">Address</string>
-    <string name="text_contract_en">Contract</string>
-    <string name="text_time_en">Time</string>
-    <string name="text_ticket_en">Ticket</string>
-    <string name="text_background_en">Background</string>
-    <string name="text_language_en">Language</string>
-    <string name="text_auto_en">Auto mode</string>
-    <string name="text_dark_en">Dark mode</string>
-    <string name="text_favorites_list_en">Favorites</string>
+    <!--MainActivity-->
+    <string name="museums_main_en">Museums</string>
+    <string name="maps_main_en">Maps</string>
+    <string name="favorites_main_en">Favorites</string>
+    <string name="settings_main_en">Settings</string>
 
-    <string name="text_museum_vi">Viện bảo tàng</string>
-    <string name="text_map_vi">Bản đồ</string>
-    <string name="text_favorite_vi">Yêu thích</string>
-    <string name="text_settings_vi">Cài đặt</string>
-    <string name="text_close_vi">Đóng</string>
-    <string name="text_museum_list_vi">Danh sách Viện bảo tàng</string>
-    <string name="text_artifact_list_vi">Danh sách Hiện vật</string>
-    <string name="text_overview_vi">Tổng quan</string>
-    <string name="text_address_vi">Địa chỉ</string>
-    <string name="text_contract_vi">Liên hệ</string>
-    <string name="text_time_vi">Thời gian</string>
-    <string name="text_ticket_vi">Giá vé</string>
-    <string name="text_background_vi">Hình nền</string>
-    <string name="text_language_vi">Ngôn ngữ</string>
-    <string name="text_auto_vi">Chế độ tự động</string>
-    <string name="text_dark_vi">Chế độ ban đêm</string>
-    <string name="text_favorites_list_vi">Danh sách Yêu thích</string>
-    <string name="title_activity_presentation">PresentationActivity</string>
-    <string name="large_text">
-        "Material is the metaphor.\n\n"
+    <string name="museums_main_vi">Viện bảo tàng</string>
+    <string name="maps_main_vi">Bản đồ</string>
+    <string name="favorites_main_vi">Yêu thích</string>
+    <string name="settings_main_vi">Cài đặt</string>
 
-        "A material metaphor is the unifying theory of a rationalized space and a system of motion."
-        "The material is grounded in tactile reality, inspired by the study of paper and ink, yet "
-        "technologically advanced and open to imagination and magic.\n"
-        "Surfaces and edges of the material provide visual cues that are grounded in reality. The "
-        "use of familiar tactile attributes helps users quickly understand affordances. Yet the "
-        "flexibility of the material creates new affordances that supercede those in the physical "
-        "world, without breaking the rules of physics.\n"
-        "The fundamentals of light, surface, and movement are key to conveying how objects move, "
-        "interact, and exist in space and in relation to each other. Realistic lighting shows "
-        "seams, divides space, and indicates moving parts.\n\n"
+    <!--MuseumsActivity-->
+    <string name="museums_list_museums_en">Museums List</string>
+    <string name="museums_list_museums_vi">Danh sách Viện bảo tàng</string>
 
-        "Bold, graphic, intentional.\n\n"
+    <!--DetailActivity-->
+    <string name="artifacts_list_detail_en">Artifacts List</string>
+    <string name="overview_detail_en">Overview: </string>
+    <string name="address_detail_en">Address: </string>
+    <string name="contract_detail_en">Contract: </string>
+    <string name="time_detail_en">Time: </string>
+    <string name="ticket_detail_en">Ticket: </string>
 
-        "The foundational elements of print based design typography, grids, space, scale, color, "
-        "and use of imagery guide visual treatments. These elements do far more than please the "
-        "eye. They create hierarchy, meaning, and focus. Deliberate color choices, edge to edge "
-        "imagery, large scale typography, and intentional white space create a bold and graphic "
-        "interface that immerse the user in the experience.\n"
-        "An emphasis on user actions makes core functionality immediately apparent and provides "
-        "waypoints for the user.\n\n"
+    <string name="artifacts_list_detail_vi">Danh sách Hiện vật</string>
+    <string name="overview_detail_vi">Tổng quan: </string>
+    <string name="address_detail_vi">Địa chỉ: </string>
+    <string name="contract_detail_vi">Liên hệ: </string>
+    <string name="time_detail_vi">Thời gian: </string>
+    <string name="ticket_detail_vi">Giá vé: </string>
 
-        "Motion provides meaning.\n\n"
+    <!--FavoritesActivity-->
+    <string name="favorites_list_favorites_en">Favorites List</string>
+    <string name="favorites_list_favorites_vi">Danh sách Yêu thích</string>
 
-        "Motion respects and reinforces the user as the prime mover. Primary user actions are "
-        "inflection points that initiate motion, transforming the whole design.\n"
-        "All action takes place in a single environment. Objects are presented to the user without "
-        "breaking the continuity of experience even as they transform and reorganize.\n"
-        "Motion is meaningful and appropriate, serving to focus attention and maintain continuity. "
-        "Feedback is subtle yet clear. Transitions are efﬁcient yet coherent.\n\n"
+    <!--SettingsActivity-->
+    <string name="settings_settings_en">Settings</string>
+    <string name="auto_settings_en">Auto mode: </string>
+    <string name="dark_settings_en">Dark mode: </string>
+    <string name="background_settings_en">Background: </string>
+    <string name="language_settings_en">Language: </string>
 
-        "3D world.\n\n"
+    <string name="settings_settings_vi">Cài Đặt</string>
+    <string name="auto_settings_vi">Chế độ tự động: </string>
+    <string name="dark_settings_vi">Chế độ ban đêm: </string>
+    <string name="background_settings_vi">Hình nền: </string>
+    <string name="language_settings_vi">Ngôn ngữ: </string>
 
-        "The material environment is a 3D space, which means all objects have x, y, and z "
-        "dimensions. The z-axis is perpendicularly aligned to the plane of the display, with the "
-        "positive z-axis extending towards the viewer. Every sheet of material occupies a single "
-        "position along the z-axis and has a standard 1dp thickness.\n"
-        "On the web, the z-axis is used for layering and not for perspective. The 3D world is "
-        "emulated by manipulating the y-axis.\n\n"
+    <!--MapsActivity-->
+    <string name="route_maps_en">Route</string>
+    <string name="search_maps_en">Search</string>
 
-        "Light and shadow.\n\n"
+    <string name="route_maps_vi">Tìm đường</string>
+    <string name="search_maps_vi">Tìm kiếm</string>
 
-        "Within the material environment, virtual lights illuminate the scene. Key lights create "
-        "directional shadows, while ambient light creates soft shadows from all angles.\n"
-        "Shadows in the material environment are cast by these two light sources. In Android "
-        "development, shadows occur when light sources are blocked by sheets of material at "
-        "various positions along the z-axis. On the web, shadows are depicted by manipulating the "
-        "y-axis only. The following example shows the card with a height of 6dp.\n\n"
+    <!--SearchDialog-->
+    <string name="search_dialog_en">Type Museum\'s name</string>
+    <string name="search_dialog_vi">Nhập tên Bảo tàng</string>
+    <string name="ok_dialog">OK</string>
 
-        "Resting elevation.\n\n"
-
-        "All material objects, regardless of size, have a resting elevation, or default elevation "
-        "that does not change. If an object changes elevation, it should return to its resting "
-        "elevation as soon as possible.\n\n"
-
-        "Component elevations.\n\n"
-
-        "The resting elevation for a component type is consistent across apps (e.g., FAB elevation "
-        "does not vary from 6dp in one app to 16dp in another app).\n"
-        "Components may have different resting elevations across platforms, depending on the depth "
-        "of the environment (e.g., TV has a greater depth than mobile or desktop).\n\n"
-
-        "Responsive elevation and dynamic elevation offsets.\n\n"
-
-        "Some component types have responsive elevation, meaning they change elevation in response "
-        "to user input (e.g., normal, focused, and pressed) or system events. These elevation "
-        "changes are consistently implemented using dynamic elevation offsets.\n"
-        "Dynamic elevation offsets are the goal elevation that a component moves towards, relative "
-        "to the component’s resting state. They ensure that elevation changes are consistent "
-        "across actions and component types. For example, all components that lift on press have "
-        "the same elevation change relative to their resting elevation.\n"
-        "Once the input event is completed or cancelled, the component will return to its resting "
-        "elevation.\n\n"
-
-        "Avoiding elevation interference.\n\n"
-
-        "Components with responsive elevations may encounter other components as they move between "
-        "their resting elevations and dynamic elevation offsets. Because material cannot pass "
-        "through other material, components avoid interfering with one another any number of ways, "
-        "whether on a per component basis or using the entire app layout.\n"
-        "On a component level, components can move or be removed before they cause interference. "
-        "For example, a floating action button (FAB) can disappear or move off screen before a "
-        "user picks up a card, or it can move if a snackbar appears.\n"
-        "On the layout level, design your app layout to minimize opportunities for interference. "
-        "For example, position the FAB to one side of stream of a cards so the FAB won’t interfere "
-        "when a user tries to pick up one of cards.\n\n"
-    </string>
-    <string name="action_settings">Settings</string>
-    <string name="title_activity_apresentation">APresentationActivity</string>
 </resources>
